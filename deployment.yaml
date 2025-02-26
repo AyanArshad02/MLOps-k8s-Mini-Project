@@ -15,8 +15,8 @@ spec:
       containers:
       - name: kubernetes-test-app
         image: kubernetes-test-app:latest
-        imagePullPolicy: Never  # Tell Kubernetes not to pull from a registry
-        # image: ayanarshad02/kubernetes-test-app:latest
+        imagePullPolicy: Never  # Tell Kubernetes not to pull from a remote registry
+        # image: ayanarshad02/kubernetes-test-app:latest # remote repo image
         resources:
           limits:
             memory: "64Mi"
@@ -24,6 +24,11 @@ spec:
         ports:
         - containerPort: 5000
 ---
+# service file, we need to create service file to expose the deployment
+# we can also create service.yaml file and write the below content in that file
+# or we can write here itself by just using --- at the end of deployment.yaml file
+
+# service.yaml is used to expose the deployment
 apiVersion: v1
 kind: Service
 metadata:
@@ -34,3 +39,11 @@ spec:
   ports:
   - port: 8080
     targetPort: 5000
+
+# Note:
+# By default imagePullPolicy is enabled and it searches for image from remote registry,
+# so we need to specify imagePullPolicy: Never [line 18] if we want to use local image and
+# don't want it to search image in remote registry such as dockerhub
+# and
+# if we want to pull image from remote registry then
+# we need to comment out line 17 and 18 and uncomment line 19
